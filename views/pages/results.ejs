@@ -10,8 +10,122 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+        <style>
+          /* Always set the map height explicitly to define the size of the div
+           * element that contains the map. */
+          #map {
+            height: 100%;
+          }
+          /* Optional: Makes the sample page fill the window. */
+          html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+          }
+        </style>
     </head>
     <body>
-        <div>TODO write content</div>
-    </body>
+        
+        <div class="page-header" style="text-align: center; padding-top: 40px; padding-bottom: 40px">   
+            <h1>Form Submitted!</h1>
+        </div>
+        
+        <div class="container" style="padding-bottom: 20px">
+            <table class="table">
+              <tbody>
+                <tr style="border-top: 3px double #8c8b8b">
+                  <td>First Name</td>
+                  <td id="display"></td>
+                </tr>
+                <tr>
+                  <td>Last Name</td>
+                  <td id="display2"></td>
+                </tr>
+                <tr>
+                  <td>Address</td>
+                  <td id="display3"></td>
+                </tr>
+                <tr>
+                  <td>City</td>
+                  <td id="display4"></td>
+                </tr>
+                <tr>
+                  <td>State</td>
+                  <td id="display5"></td>
+                </tr>
+                <tr>
+                  <td>Zip</td>
+                  <td id="display6"></td>
+                </tr>
+                <tr>
+                  <td>Education Level</td>
+                  <td id="display10"></td>
+                </tr>
+                <tr>
+                  <td>Income (Yearly)</td>
+                  <td id="display11"></td>
+                </tr>
+                <tr>
+                  <td>Phone</td>
+                  <td id="display7"></td>
+                </tr>
+                <tr>
+                  <td>E-mail</td>
+                  <td id="display8"></td>
+                </tr>
+                <tr>
+                  <td>Password</td>
+                  <td id="display9"></td>
+                </tr>
+              </tbody>
+            </table>
+            <hr style="border-top: 3px double #8c8b8b">
+        </div>
+        
+        <div id="map"></div>
+        
+        <script>
+            var mylist = JSON.parse(localStorage['mylist']);
+            document.getElementById("display").innerHTML = mylist[0]; 
+            document.getElementById("display2").innerHTML = mylist[1]; 
+            document.getElementById("display3").innerHTML = mylist[2]; 
+            document.getElementById("display4").innerHTML = mylist[3]; 
+            document.getElementById("display5").innerHTML = mylist[4]; 
+            document.getElementById("display6").innerHTML = mylist[5]; 
+            document.getElementById("display7").innerHTML = mylist[6]; 
+            document.getElementById("display8").innerHTML = mylist[7]; 
+            document.getElementById("display9").innerHTML = mylist[8];
+            document.getElementById("display10").innerHTML = mylist[9];
+            document.getElementById("display11").innerHTML = mylist[10];  
+        </script>
+        
+        <script>
+            function initMap() {
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 8,
+                    center: {lat: -34.397, lng: 150.644}
+                });
+                var geocoder = new google.maps.Geocoder();
+                geocodeAddress(geocoder, map);
+                map.setZoom(14);
+            }
+
+            function geocodeAddress(geocoder, resultsMap) {
+                var address = mylist[2];
+                geocoder.geocode({'address': address}, function(results, status) {
+                    if (status === 'OK') {
+                        resultsMap.setCenter(results[0].geometry.location);
+                        var marker = new google.maps.Marker({
+                            map: resultsMap,
+                            position: results[0].geometry.location
+                        });
+                    } else {
+                        alert('Geocode was not successful for the following reason: ' + status);
+                    }
+                });
+            }
+        </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBGiu5KAOYJJu8LxVf3MgMBAB8GvAsNma0&callback=initMap"
+        async defer></script>
+    </body> 
 </html>
